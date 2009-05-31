@@ -15,5 +15,6 @@ t.user_agent = config[:agent]
 REPLY_LIST = 'list/reply_list.yml'
 list = t.get_reply_list(:cnt=>50)[:entries]
 file = open(REPLY_LIST, 'r'){|f|YAML::load(f.read)}
-open(REPLY_LIST, 'w'){|f|f.print((list | file).to_yaml)}
+new_list = (list | file) if list and file
+open(REPLY_LIST, 'w'){|f|f.print(new_list.to_yaml)} if new_list
 

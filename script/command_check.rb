@@ -27,7 +27,6 @@ messages = messages.select{|ms|
 }.reject{|ms|
   checked_list.include?(ms[:memo_id])
 }
-p messages
 command_stack += messages if messages
 command_stack.uniq!
 open(COMMAND_STACK_FILE, 'w'){|f|f.print(command_stack.to_yaml)}

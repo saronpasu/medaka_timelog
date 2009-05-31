@@ -31,10 +31,6 @@ p command_target[:memo_text]
 command = find_command(command_target[:memo_text])
 dummy_obj = Object.allocate.extend(Command)
 m = dummy_obj.method(command[:name])
-p command[:name]
-p command[:pattern]
-p command[:type]
-p command[:output]
 res_body = m.call
 res_body = name_replace(res_body, command_target[:author][:user_name]) if command[:type].eql?(:response)
 
@@ -47,8 +43,6 @@ case command[:output]
 end
 res_header += '@'+command_target[:author][:user_id]+' '
 
-p res_header
-p res_body
 res = res_header+res_body
 t.update(res)
 
