@@ -32,7 +32,7 @@ command = find_command(command_target[:memo_text])
 dummy_obj = Object.allocate.extend(Command)
 m = dummy_obj.method(command[:name])
 res_body = m.call
-res_body = name_replace(res_body, command_target[:author][:user_name]) if command[:type].eql?(:response)
+res_body = name_replace(res_body, command_target[:author]) if command[:type].eql?(:response)
 
 res_header = ''
 case command[:output]

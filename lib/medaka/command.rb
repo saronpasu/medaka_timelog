@@ -19,6 +19,7 @@ module Medaka::Command
   OYATSU_TEMPLATE_FILE = 'list/oyatsu_template.yml'
   URANAI_LIST_FILE = 'list/uranai_list.yml'
   URANAI_TEMPLATE_FILE = 'list/uranai_template.yml'
+  URANAI_DATEFORMAT_FILE = 'list/uranai_dateformat.yml'
   HELP_TEMPLATE_FILE = 'list/help_template.yml'
   VERSION_TEMPLATE_FILE = 'list/version_template.yml'
   SIXAMO_DICT = 'dict'
@@ -43,12 +44,22 @@ module Medaka::Command
     return list
   end
 
-  def oyatu
+  def init_uranai_dateformat
+    if String.allocate.respond_to? :encoding then
+      opt = 'r:utf-8'
+    else
+      opt = 'r'
+    end
+    format = open(URANAI_DATEFORMAT_FILE, opt){|f|YAML::load(f.read)}
+    return Date.today.strftime(format)
+  end
+
+  def oyatsu
     oyatsu_list = init_oyatsu_list
-    oyatsu_template = init_oyatsu_template_list
+    oyatsu_template = init_oyatsu_template
     oyatsu = oyatsu_list[rand(oyatsu_list.size)]
     template = oyatsu_template[rand(oyatsu_template.size)]
-    result = template.sub(/:oyatsu:/, oyatsu)
+    result = template.gsub(/:oyatsu:/, oyatsu)
     return result
   end
 
@@ -75,12 +86,14 @@ module Medaka::Command
   def uranai
     uranai_list = init_uranai_list
     uranai_template = init_uranai_template
-    uranai = uranai_list[rand(uranai_list.size)]
+    unsei = uranai_list[rand(uranai_list.size)]
+    date = init_uranai_dateformat
     template = uranai_template[rand(uranai_template.size)]
     sixamo = Sixamo.new(SIXAMO_DICT)
     luckey_word = sixamo.talk
-    result = template.sub(/:uranai:/, uranai)
-    result.sub!(/:luckey_word:/, luckey_word)
+    result = template.gsub(/:unsei:/, unsei)
+    result.gsub!(/:date:/, date)
+    result.gsub!(/:luckey_word:/, luckey_word)
     return result
   end
 
