@@ -22,6 +22,8 @@ t.user_agent = config[:agent]
 command_stack = open(COMMAND_STACK_FILE, 'r'){|f|YAML::load(f.read)}
 command_checked = open(COMMAND_CHECKED_FILE, 'r'){|f|YAML::load(f.read)}
 
+exit if command_stack.empty?
+
 command_target = command_stack.pop
 open(COMMAND_STACK_FILE, 'w'){|f|f.print(command_stack.to_yaml)}
 

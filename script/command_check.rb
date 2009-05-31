@@ -20,13 +20,15 @@ t.user_agent = config[:agent]
 checked_list = open(COMMAND_CHECK_FILE, 'r'){|f|YAML::load(f.read)}
 command_stack = open(COMMAND_STACK_FILE, 'r'){|f|YAML::load(f.read)}
 
-messages = t.get_direct_messages(:cnt=>50)[:entries].reject{|ms|ms[:author][:user_id].eql(config[:user_id])}
+messages = t.get_direct_messages(:cnt=>50)[:entries].reject{|ms|ms[:author][:user_id].eql?(config[:user_id])}
 
-command_stac += messages.select{|ms|
+messages = messages.select{|ms|
   find_command(ms[:memo_text])
-}.reject{|ms|
+}.reject!{|ms|
   checked_list.include?(ms[:memo_id])
 }
+p messages
+command_stack += messages if messages
 command_stack.uniq!
 open(COMMAND_STACK_FILE, 'w'){|f|f.print(command_stack.to_yaml)}
 
