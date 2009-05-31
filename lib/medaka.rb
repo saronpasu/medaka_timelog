@@ -53,7 +53,9 @@ module Medaka
     command_list.map! do |command|
       {
         :name => command[:name],
-        :pattern => Regexp.compile(command[:pattern])
+        :pattern => Regexp.compile(command[:pattern]),
+        :type => command[:type],
+        :output => command[:output]
       }
     end unless command_list.empty?
     return command_list

@@ -24,7 +24,7 @@ messages = t.get_direct_messages(:cnt=>50)[:entries].reject{|ms|ms[:author][:use
 
 messages = messages.select{|ms|
   find_command(ms[:memo_text])
-}.reject!{|ms|
+}.reject{|ms|
   checked_list.include?(ms[:memo_id])
 }
 p messages

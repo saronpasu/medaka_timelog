@@ -9,7 +9,7 @@ require 'yaml'
 include Medaka
 
 COMMAND_STACK_FILE = 'list/command_stack.yml'
-COMMAND_CHECK_FILE = 'list/command_checked.yml'
+COMMAND_CHECKED_FILE = 'list/command_checked.yml'
 CONFIG_FILE = 'config.yml'
 
 config = open(CONFIG_FILE, 'r'){|f|YAML::load(f.read)}
@@ -27,10 +27,16 @@ exit if command_stack.empty?
 command_target = command_stack.pop
 open(COMMAND_STACK_FILE, 'w'){|f|f.print(command_stack.to_yaml)}
 
+p command_target[:memo_text]
 command = find_command(command_target[:memo_text])
-m = Command.method(command[:name])
+dummy_obj = Object.allocate.extend(Command)
+m = dummy_obj.method(command[:name])
+p command[:name]
+p command[:pattern]
+p command[:type]
+p command[:output]
 res_body = m.call
-res_body = name_replace(res_body, command_target[:author][:user_name]) if command[:type].eql(:response)
+res_body = name_replace(res_body, command_target[:author][:user_name]) if command[:type].eql?(:response)
 
 res_header = ''
 case command[:output]
@@ -41,10 +47,12 @@ case command[:output]
 end
 res_header += '@'+command_target[:author][:user_id]+' '
 
+p res_header
+p res_body
 res = res_header+res_body
 t.update(res)
 
-command_checked += command_target[:memo_id]
+command_checked += [command_target[:memo_id]]
 command_checked.uniq!
 open(COMMAND_CHECKED_FILE, 'w'){|f|f.print(command_checked.to_yaml)}
 

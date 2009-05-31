@@ -101,6 +101,7 @@ module Medaka::Command
     end
     result = open(VERSION_TEMPLATE_FILE, opt){|f|YAML::load(f.read)}
     result.sub!(/:version:/, VERSION.to_s)
+    return result
   end
 end
 
