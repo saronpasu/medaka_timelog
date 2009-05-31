@@ -42,7 +42,7 @@ end
 res_header += '@'+command_target[:author][:user_id]+' '
 
 res = res_header+res_body
-t.update(URI.escape(res))
+t.update(res)
 
 command_checked += command_target[:memo_id]
 command_checked.uniq!

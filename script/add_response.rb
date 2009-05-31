@@ -33,7 +33,7 @@ res_body = name_replace(res_body, res_target[:author], friends)
 
 # p res_header+' '+res_body
 res = URI.escape(res_header+' '+res_body)
-t.update(res)
+t.update(res, res_target[:memo_id])
 
 responsed.push(res_target[:memo_id])
 open(RESPONSED_FILE, 'w'){|f|f.print(responsed.to_yaml)}

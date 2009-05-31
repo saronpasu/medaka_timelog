@@ -27,7 +27,7 @@ res_header = '/P @'+res_target[:author][:user_id]+' '
 res_body = sixamo.talk(res_target[:memo_text])
 friends = friend_list[rand(friend_list.size-10)..10]
 res_body = name_replace(res_body, res_target[:author][:user_name], friends)
-res = URI.escape(res_header+res_body)
+res = res_header+res_body
 
 sleep 10
 #p res_header+res_body
